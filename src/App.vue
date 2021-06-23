@@ -262,7 +262,7 @@ body {
 }
 
 .container {
-	max-width: 54rem;
+	max-width: 32rem;
 	margin: 4rem auto;
 	padding: 1rem;
 	position: relative;
@@ -284,15 +284,11 @@ body {
 .location {
 	font-size: 1.25rem;
 	font-weight: 500;
-}
-
-.icon,
-.description {
-	grid-column: 2/3;
+	grid-row: 1;
 }
 
 .icon {
-	grid-row: 1/5;
+	grid-row: 2;
 	font-size: 8rem;
 	color: rgba(255, 255, 255, 0.95);
 	position: relative;
@@ -313,32 +309,30 @@ body {
 }
 
 .description {
-	grid-row: 5/6;
-}
-
-.location,
-.temperature,
-.max-and-min-temperature,
-.feels-like {
-	text-align: right;
-	grid-column: 1/2;
+	grid-row: 3;
 }
 
 .temperature {
+	grid-row: 4;
 	font-size: 3rem;
 	font-weight: 500;
-	line-height: 1;
 	color: rgba(255, 255, 255, 0.95);
+	line-height: 1;
+	margin-top: 1rem;
 }
 
 .max-and-min-temperature,
 .humidity-and-wind {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
 
 	& > * + * {
 		margin-left: 1rem;
 	}
+}
+
+.max-and-min-temperature {
+	grid-row: 5;
 }
 
 .max-temperature,
@@ -354,13 +348,65 @@ body {
 	font-size: 0.75em;
 }
 
+.feels-like {
+	grid-row: 6;
+}
+
 .humidity-and-wind {
-	grid-row: 5/6;
-	width: 100%;
+	grid-row: 7;
 }
 
 i + span {
 	margin-left: 0.325rem;
+}
+
+@media (min-width: 30rem) {
+	.icon,
+	.description {
+		grid-column: 2;
+	}
+
+	.icon {
+		grid-row: 1/5;
+	}
+
+	.description {
+		grid-row: 5;
+	}
+
+	.location,
+	.temperature,
+	.max-and-min-temperature,
+	.feels-like {
+		text-align: right;
+		grid-column: 1;
+	}
+
+	.location {
+		grid-row: 1;
+	}
+
+	.temperature {
+		grid-row: 2;
+		margin-top: 0;
+	}
+
+	.max-and-min-temperature,
+	.humidity-and-wind {
+		justify-content: flex-end;
+	}
+
+	.max-and-min-temperature {
+		grid-row: 3;
+	}
+
+	.feels-like {
+		grid-row: 4;
+	}
+
+	.humidity-and-wind {
+		grid-row: 5;
+	}
 }
 
 .fade-slide-up-enter-active {

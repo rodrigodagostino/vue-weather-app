@@ -96,7 +96,6 @@ export default {
 <style lang="scss">
 .search-form {
 	position: relative;
-	width: max-content;
 	margin: 0 auto;
 	z-index: 10;
 }
@@ -110,7 +109,6 @@ export default {
 	text-align: center;
 	padding: 1rem 1.25rem;
 	width: 100%;
-	max-width: 32rem;
 	outline: 8px solid transparent;
 	transition: background-color 0.32s ease, border-radius 0.32s ease, outline 0.32s ease;
 
