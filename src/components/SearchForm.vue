@@ -109,12 +109,13 @@ export default {
 	text-align: center;
 	padding: 1rem 1.25rem;
 	width: 100%;
-	outline: 8px solid transparent;
-	transition: background-color 0.32s ease, border-radius 0.32s ease, outline 0.32s ease;
+	box-shadow: 0 0 0 0.5rem transparent;
+	outline: none;
+	transition: background-color 0.32s ease, border-radius 0.32s ease, box-shadow 0.32s ease;
 
 	&:focus {
 		background-color: rgba(255, 255, 255, 0.85);
-		outline-color: rgba(255, 255, 255, 0.25);
+		box-shadow: 0 0 0 0.5rem rgba(255, 255, 255, 0.25);
 	}
 
 	&.is-active {
@@ -132,8 +133,9 @@ export default {
 	max-width: 32rem;
 	border-radius: 0 0 2.125rem 2.125rem;
 	overflow: hidden;
-	outline: 8px solid transparent;
-	transition: background-color 0.32s ease, outline 0.32s ease;
+	box-shadow: 0 0 0 0.5rem transparent;
+	outline: none;
+	transition: background-color 0.32s ease, box-shadow 0.32s ease;
 
 	&:focus-within,
 	&:hover {
@@ -141,7 +143,7 @@ export default {
 	}
 
 	&:focus-within {
-		outline-color: rgba(255, 255, 255, 0.25);
+		box-shadow: 0 0 0 0.5rem rgba(255, 255, 255, 0.25);
 	}
 
 	.search-suggestion {
