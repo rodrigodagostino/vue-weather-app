@@ -1,8 +1,8 @@
 <template>
-	<form class="search-form">
+	<form @submit.prevent="fetchSearchData" class="search-form">
 		<input
 			type="text"
-			v-model="query"
+			v-model.trim="query"
 			@input="fetchSearchData"
 			class="search-input"
 			:class="{ 'is-active': isFetching || suggestions }"
@@ -102,7 +102,7 @@ export default {
 
 .search-input {
 	font-size: 1.5rem;
-	color: var(--sky-800);
+	color: var(--gray-600);
 	background-color: rgba(255, 255, 255, 0.75);
 	border: none;
 	border-radius: 2.125rem 2.125rem;
@@ -114,7 +114,7 @@ export default {
 	transition: background-color 0.32s ease, border-radius 0.32s ease, box-shadow 0.32s ease;
 
 	&:focus {
-		background-color: rgba(255, 255, 255, 0.85);
+		background-color: rgba(255, 255, 255, 0.9);
 		box-shadow: 0 0 0 0.5rem rgba(255, 255, 255, 0.25);
 	}
 
@@ -139,7 +139,7 @@ export default {
 
 	&:focus-within,
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.85);
+		background-color: rgba(255, 255, 255, 0.9);
 	}
 
 	&:focus-within {
@@ -147,7 +147,7 @@ export default {
 	}
 
 	.search-suggestion {
-		color: var(--sky-900);
+		color: var(--gray-600);
 
 		button {
 			width: 100%;
@@ -159,7 +159,7 @@ export default {
 
 			&:focus,
 			&:hover {
-				background-color: var(--sky-200);
+				background-color: rgba(0, 92, 184, 0.12);
 			}
 		}
 	}
