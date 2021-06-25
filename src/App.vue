@@ -46,6 +46,7 @@ export default {
 		SearchForm,
 	},
 	setup() {
+		const appClasses = ref( 'clear-sky--day' )
 		const weatherData = ref( null )
 		const units = ref( 'metric' )
 		const timeOfDay = ref( null )
@@ -82,10 +83,34 @@ export default {
 				}
 				wind.value = `${ Math.round( wd.wind.speed ) } km/h`
 				iconClasses.value = `icon wi wi-owm-${ timeOfDay.value }-${ wd.weather[ 0 ].id }`
+
+				const app = document.getElementById( 'app' )
+				if ( wd.weather[ 0 ].description.includes( 'clear sky' ) ) {
+					app.className = `clear-sky--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'clouds' ) ) {
+					app.className = `clouds--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'rain' ) ) {
+					app.className = `rain--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'drizzle' ) ) {
+					app.className = `drizzle--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'thunderstorm' ) ) {
+					app.className = `thunderstorm--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'snow' ) ) {
+					app.className = `snow--${ timeOfDay.value }`
+				}
+				if ( wd.weather[ 0 ].description.includes( 'mist' ) ) {
+					app.className = `mist--${ timeOfDay.value }`
+				}
 			}
 		} )
 
 		return {
+			appClasses,
 			weatherData,
 			units,
 			timeOfDay,
@@ -103,6 +128,9 @@ export default {
 			setIsFetching,
 		}
 	},
+	created() {
+		document.getElementById( 'app' ).className = 'clear-sky--day'
+	},
 }
 </script>
 
@@ -113,33 +141,22 @@ export default {
 :root {
 	--font-main: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
 
-	--cyan-200: #a5f3fc;
-	--cyan-300: #67e8f9;
-	--cyan-400: #22d3ee;
-	--cyan-500: #06b6d4;
-	--cyan-600: #0891b2;
+	--teal-500: #14b8a6;
+	--teal-700: #0F766E;
 
-	--sky-050: #f0f9ff;
-	--sky-100: #e0f2fe;
-	--sky-200: #bae6fd;
-	--sky-300: #7dd3fc;
 	--sky-400: #38bdf8;
-	--sky-500: #0ea5e9;
 	--sky-600: #0284c7;
-	--sky-700: #0369a1;
-	--sky-800: #075985;
-	--sky-900: #0c4a6e;
 
-	--blue-050: #eff6ff;
-	--blue-100: #dbeafe;
-	--blue-200: #bfdbfe;
 	--blue-300: #93c5fd;
 	--blue-400: #60a5fa;
 	--blue-500: #3b82f6;
 	--blue-600: #2563eb;
-	--blue-700: #1d4ed8;
-	--blue-800: #1e40af;
-	--blue-900: #1e3a8a;
+
+	--violet-500: #8b5cf6;
+	--violet-700: #6d28d9;
+
+	--indigo-300: #A5B4FC;
+	--indigo-500: #6366F1;
 
 	--white: #f3f3f5;
 	--gray-050: #ededf0;
@@ -254,17 +271,99 @@ body {
 	font-family: var(--font-main);
 	font-size: 1rem;
 	color: rgba(255, 255, 255, 0.75);
-	background: linear-gradient(180deg, var(--sky-400), var(--blue-500));
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	height: 100%;
 	text-align: center;
 }
 
+::selection {
+	background-color: rgba(0, 32, 64, 0.12);
+}
+
+#app {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	padding: 4rem 0;
+	position: relative;
+	transition: background-color 0.32s ease;
+
+	&[class*='--day'],
+	&[class*='--night'] {
+		&::before {
+			content: '';
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			position: fixed;
+		}
+	}
+
+	&[class*='--day']::before {
+		background: linear-gradient(172deg, rgba(180, 220, 255, 0.32), transparent, rgba(0, 0, 128, 0.12));
+	}
+
+	&[class*='--night']::before {
+		background: linear-gradient(172deg, rgba(0, 32, 64, 0.24), transparent, rgba(180, 220, 255, 0.12));
+	}
+
+	&.clear-sky--day {
+		background-color: var(--sky-400);
+	}
+
+	&.clear-sky--night {
+		background-color: var(--sky-600);
+	}
+
+	&.clouds--day {
+		background-color: var(--blue-400);
+	}
+
+	&.clouds--night {
+		background-color: var(--blue-600);
+	}
+
+	&.rain--day,
+	&.drizzle--day {
+		background-color: var(--teal-500);
+	}
+
+	&.rain--night,
+	&.drizzle--night {
+		background-color: var(--teal-700);
+	}
+
+	&.thunderstorm--day {
+		background-color: var(--violet-500);
+	}
+
+	&.thunderstorm--night {
+		background-color: var(--violet-700);
+	}
+
+	&.snow--day {
+		background-color: var(--blue-300);
+	}
+
+	&.snow--night {
+		background-color: var(--blue-500);
+	}
+
+	&.mist--day {
+		background-color: var(--indigo-300);
+	}
+
+	&.mist--night {
+		background-color: var(--indigo-500);
+	}
+}
+
 .container {
 	max-width: 32rem;
-	margin: 4rem auto;
 	padding: 1rem;
+	margin: 0 auto;
 	position: relative;
 }
 
@@ -299,12 +398,12 @@ body {
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -48%);
-		width: 2.4em;
-		height: 2.4em;
+		width: 2.2em;
+		height: 2.2em;
 		border-radius: 50%;
 		background-color: rgba(255, 255, 255, 0.15);
 		box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.05);
-		z-index: -1;
+		z-index: 0;
 	}
 }
 
