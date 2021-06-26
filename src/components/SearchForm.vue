@@ -32,7 +32,7 @@ import { ref, watch } from 'vue'
 import _debounce from 'lodash/debounce'
 
 export default {
-	emits: [ 'setWeatherData', 'setIsFetching' ],
+	emits: [ 'fetchWeatherData' ],
 	setup( _, context ) {
 		const query = ref( '' )
 		const apiKey = process.env.VUE_APP_OPENWEATHERMAP_API_KEY
@@ -61,20 +61,9 @@ export default {
 			clearSuggestions()
 		}
 
-		// A second fetch is required to get access to additional data (e.g., sunrise, sunset, timezone).
 		watch( selectedLocation, async ( currSelectedLocation, prevSelectedLocation ) => {
 			if ( !prevSelectedLocation || currSelectedLocation !== prevSelectedLocation ) {
-				try {
-					context.emit( 'setIsFetching', true )
-					const url = `https://api.openweathermap.org/data/2.5/weather?q=${ currSelectedLocation }&appid=${ apiKey }&units=${ units.value }`
-					const response = await fetch( url )
-					const data = await response.json()
-					suggestions.value = data.list
-					context.emit( 'setWeatherData', data )
-					context.emit( 'setIsFetching', false )
-				} catch ( error ) {
-					console.error( error )
-				}
+				context.emit( 'fetchWeatherData', currSelectedLocation )
 			}
 		} )
 
@@ -102,7 +91,7 @@ export default {
 
 .search-input {
 	font-size: 1.5rem;
-	color: var(--gray-600);
+	color: var(--gray-700);
 	background-color: rgba(255, 255, 255, 0.75);
 	border: none;
 	border-radius: 2.125rem 2.125rem;
@@ -147,7 +136,7 @@ export default {
 	}
 
 	.search-suggestion {
-		color: var(--gray-600);
+		color: var(--gray-700);
 
 		button {
 			width: 100%;

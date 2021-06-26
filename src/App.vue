@@ -1,88 +1,57 @@
 <template>
 	<div class="container">
-		<SearchForm @setWeatherData="setWeatherData" @setIsFetching="setIsFetching" />
-		<transition name="fade-slide-up" leave-active-class="fade" appear>
-			<BaseSpinner v-if="isFetching" size="large" />
-			<section v-else-if="weatherData" class="weather-data">
-				<h2 class="location">{{ location }}</h2>
-				<i :class="iconClasses" />
-				<p class="description">{{ description }}</p>
-				<p class="temperature">{{ temperature }}</p>
-				<div class="max-and-min-temperature">
-					<p class="max-temperature">
-						<i class="fas fa-chevron-up" />
-						<span>{{ maxTemperature }}</span>
-					</p>
-					<p class="min-temperature">
-						<i class="fas fa-chevron-down" />
-						<span>{{ minTemperature }}</span>
-					</p>
-				</div>
-				<p class="feels-like">{{ feelsLike }}</p>
-				<div class="humidity-and-wind">
-					<p class="humidity">
-						<i class="wi wi-humidity" />
-						<span>{{ humidity }}</span>
-					</p>
-					<p class="wind">
-						<i class="fas fa-wind" />
-						<span>{{ wind }}</span>
-					</p>
-				</div>
-			</section>
-		</transition>
+		<SearchForm @fetchWeatherData="fetchWeatherData" />
+		<WeatherDetails
+			v-if="weatherData"
+			:weatherData="weatherData"
+			:isFetching="isFetching"
+			:units="units"
+			:timeOfDay="timeOfDay"
+		/>
 	</div>
 </template>
 
 <script>
 import { ref, watch } from 'vue'
-import BaseSpinner from './components/BaseSpinner.vue'
 import SearchForm from './components/SearchForm.vue'
+import WeatherDetails from './components/WeatherDetails.vue'
 
 export default {
 	name: 'App',
 	components: {
-		BaseSpinner,
 		SearchForm,
+		WeatherDetails,
 	},
 	setup() {
-		const appClasses = ref( 'clear-sky--day' )
 		const weatherData = ref( null )
+		const apiKey = process.env.VUE_APP_OPENWEATHERMAP_API_KEY
+		const isFetching = ref( false )
+		const appClasses = ref( 'clear-sky--day' )
 		const units = ref( 'metric' )
 		const timeOfDay = ref( null )
-		const location = ref( null )
-		const iconClasses = ref( null )
-		const temperature = ref( null )
-		const maxTemperature = ref( null )
-		const minTemperature = ref( null )
-		const feelsLike = ref( null )
-		const humidity = ref( null )
-		const description = ref( null )
-		const wind = ref( null )
-		const isFetching = ref( false )
 
-		const setWeatherData = data => weatherData.value = data
-
-		const setIsFetching = state => isFetching.value = state
+		// A second fetch is required to access additional data (e.g., sunrise, sunset, timezone).
+		const fetchWeatherData = async selectedLocation => {
+			try {
+				isFetching.value = true
+				const url = `https://api.openweathermap.org/data/2.5/weather?q=${ selectedLocation }&appid=${ apiKey }&units=${ units.value }`
+				const response = await fetch( url )
+				const data = await response.json()
+				weatherData.value = data
+				isFetching.value = false
+			} catch ( error ) {
+				console.error( error )
+			}
+		}
 
 		watch( weatherData, ( weatherData, prevWeatherData ) => {
 			if ( !prevWeatherData || weatherData.id !== prevWeatherData.id ) {
 				const wd = weatherData
-				location.value = `${ wd.name }, ${ wd.sys.country }`
-				temperature.value = `${ Math.round( wd.main.temp ) }°C`
-				maxTemperature.value = `${ Math.round( wd.main.temp_max ) }°C`
-				minTemperature.value = `${ Math.round( wd.main.temp_min ) }°C`
-				feelsLike.value = `Feels like ${ Math.round( wd.main.feels_like ) }°C`
-				humidity.value = wd.main.humidity
-				description.value =
-					wd.weather[ 0 ].description.charAt( 0 ).toUpperCase() + wd.weather[ 0 ].description.slice( 1 )
-				if ( wd.weather[ 0 ].icon.includes( 'd' ) ) {
+				if ( wd.dt > wd.sys.sunrise && wd.dt < wd.sys.sunset ) {
 					timeOfDay.value = 'day'
 				} else {
 					timeOfDay.value = 'night'
 				}
-				wind.value = `${ Math.round( wd.wind.speed ) } km/h`
-				iconClasses.value = `icon wi wi-owm-${ timeOfDay.value }-${ wd.weather[ 0 ].id }`
 
 				const app = document.getElementById( 'app' )
 				if ( wd.weather[ 0 ].description.includes( 'clear sky' ) ) {
@@ -110,26 +79,13 @@ export default {
 		} )
 
 		return {
-			appClasses,
 			weatherData,
+			fetchWeatherData,
+			isFetching,
+			appClasses,
 			units,
 			timeOfDay,
-			location,
-			iconClasses,
-			temperature,
-			maxTemperature,
-			minTemperature,
-			feelsLike,
-			humidity,
-			description,
-			setWeatherData,
-			wind,
-			isFetching,
-			setIsFetching,
 		}
-	},
-	created() {
-		document.getElementById( 'app' ).className = 'clear-sky--day'
 	},
 }
 </script>
@@ -142,7 +98,7 @@ export default {
 	--font-main: 'Poppins', Avenir, Helvetica, Arial, sans-serif;
 
 	--teal-500: #14b8a6;
-	--teal-700: #0F766E;
+	--teal-700: #0f766e;
 
 	--sky-400: #38bdf8;
 	--sky-600: #0284c7;
@@ -155,8 +111,8 @@ export default {
 	--violet-500: #8b5cf6;
 	--violet-700: #6d28d9;
 
-	--indigo-300: #A5B4FC;
-	--indigo-500: #6366F1;
+	--indigo-300: #a5b4fc;
+	--indigo-500: #6366f1;
 
 	--white: #f3f3f5;
 	--gray-050: #ededf0;
@@ -282,6 +238,7 @@ body {
 }
 
 #app {
+	background-color: var(--sky-400);
 	width: 100%;
 	height: 100%;
 	display: flex;
