@@ -1,14 +1,23 @@
 <template>
-	<div class="container">
-		<SearchForm @fetchWeatherData="fetchWeatherData" />
-		<WeatherDetails
-			v-if="weatherData"
-			:weatherData="weatherData"
-			:isFetching="isFetching"
-			:units="units"
-			:timeOfDay="timeOfDay"
-		/>
-	</div>
+	<main class="site-main">
+		<div class="container">
+			<SearchForm @fetchWeatherData="fetchWeatherData" />
+			<WeatherDetails
+				v-if="weatherData"
+				:weatherData="weatherData"
+				:isFetching="isFetching"
+				:units="units"
+				:timeOfDay="timeOfDay"
+			/>
+		</div>
+	</main>
+	<footer class="site-footer">
+		<div class="container">
+			<a href="https://github.com/rodrigodagostino/vue-movie-search-app" target="_blank">
+				Made with <img src="@/assets/vue-logo.png" alt="Vue.js logo" /> by Rodrigo D’Agostino
+			</a>
+		</div>
+	</footer>
 </template>
 
 <script>
@@ -242,7 +251,8 @@ body {
 	width: 100%;
 	height: 100%;
 	display: flex;
-	padding: 4rem 0;
+	flex-direction: column;
+	justify-content: center;
 	position: relative;
 	transition: background-color 0.32s ease;
 
@@ -255,6 +265,17 @@ body {
 			bottom: 0;
 			left: 0;
 			position: fixed;
+		}
+	}
+
+	&[class*='--night'] {
+		.site-footer a {
+			color: var(--gray-200);
+
+			&:focus,
+			&:hover {
+				color: var(--white);
+			}
 		}
 	}
 
@@ -414,6 +435,37 @@ body {
 
 i + span {
 	margin-left: 0.325rem;
+}
+
+.site-footer {
+	font-size: 0.875rem;
+	text-align: center;
+	margin-top: auto;
+}
+
+.site-footer .container {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
+}
+
+.site-footer a {
+	color: var(--gray-700);
+	text-decoration: none;
+	transition: color 0.24s ease;
+
+	&:focus,
+	&:hover {
+		color: var(--gray-900);
+	}
+}
+
+.site-footer img {
+	height: 1.25rem;
+	width: auto;
+	vertical-align: middle;
+	margin: 0 0.25rem;
+	display: inline-block;
 }
 
 @media (min-width: 30rem) {
