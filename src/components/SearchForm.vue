@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="fetchSearchData" class="search-form">
+	<form @submit.prevent="fetchSearchData" class="search-form" :style="formStyles">
 		<input
 			type="text"
 			v-model.trim="query"
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import _debounce from 'lodash/debounce'
 
 export default {
@@ -40,6 +40,13 @@ export default {
 		const suggestions = ref( null )
 		const selectedLocation = ref( null )
 		const isFetching = ref( false )
+
+		const formStyles = computed( () => {
+			if ( !selectedLocation.value ) {
+				return { 'margin-top': '32vh' }
+			}
+			return { 'margin-top': '20vh' }
+		} )
 
 		const fetchSearchData = _debounce( async () => {
 			if ( query.value ) {
@@ -77,6 +84,7 @@ export default {
 			selectLocation,
 			clearSuggestions,
 			isFetching,
+			formStyles,
 		}
 	},
 }
@@ -87,6 +95,7 @@ export default {
 	position: relative;
 	margin: 0 auto;
 	z-index: 10;
+	transition: margin 0.32s ease;
 }
 
 .search-input {
