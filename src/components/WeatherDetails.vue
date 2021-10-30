@@ -31,50 +31,31 @@
 	</transition>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue'
 import BaseSpinner from '@/components/BaseSpinner.vue'
 
-export default {
-	name: 'App',
-	components: {
-		BaseSpinner,
-	},
-	props: {
-		weatherData: Object,
-		units: String,
-		timeOfDay: String,
-		isFetching: Boolean,
-	},
-	setup( props ) {
-		const location = computed( () => `${ props.weatherData.name }, ${ props.weatherData.sys.country }` )
-		const iconClasses = computed( () => `icon wi wi-owm-${ props.timeOfDay }-${ props.weatherData.weather[ 0 ].id }` )
-		const temperature = computed( () => `${ Math.round( props.weatherData.main.temp ) }°C` )
-		const maxTemperature = computed( () => `${ Math.round( props.weatherData.main.temp_max ) }°C` )
-		const minTemperature = computed( () => `${ Math.round( props.weatherData.main.temp_min ) }°C` )
-		const feelsLike = computed( () => `Feels like ${ Math.round( props.weatherData.main.feels_like ) }°C` )
-		const humidity = computed( () => `${ props.weatherData.main.humidity }%` )
-		const description = computed( () => {
-			return (
-				props.weatherData.weather[ 0 ].description.charAt( 0 ).toUpperCase() +
-				props.weatherData.weather[ 0 ].description.slice( 1 )
-			)
-		} )
-		const wind = computed( () => `${ Math.round( props.weatherData.wind.speed ) } km/h` )
+const props = defineProps( {
+	weatherData: Object,
+	units: String,
+	timeOfDay: String,
+	isFetching: Boolean,
+} )
 
-		return {
-			location,
-			iconClasses,
-			temperature,
-			maxTemperature,
-			minTemperature,
-			feelsLike,
-			humidity,
-			description,
-			wind,
-		}
-	},
-}
+const location = computed( () => `${ props.weatherData.name }, ${ props.weatherData.sys.country }` )
+const iconClasses = computed( () => `icon wi wi-owm-${ props.timeOfDay }-${ props.weatherData.weather[ 0 ].id }` )
+const temperature = computed( () => `${ Math.round( props.weatherData.main.temp ) }°C` )
+const maxTemperature = computed( () => `${ Math.round( props.weatherData.main.temp_max ) }°C` )
+const minTemperature = computed( () => `${ Math.round( props.weatherData.main.temp_min ) }°C` )
+const feelsLike = computed( () => `Feels like ${ Math.round( props.weatherData.main.feels_like ) }°C` )
+const humidity = computed( () => `${ props.weatherData.main.humidity }%` )
+const description = computed( () => {
+	return (
+		props.weatherData.weather[ 0 ].description.charAt( 0 ).toUpperCase() +
+				props.weatherData.weather[ 0 ].description.slice( 1 )
+	)
+} )
+const wind = computed( () => `${ Math.round( props.weatherData.wind.speed ) } km/h` )
 </script>
 
 <style lang="scss">

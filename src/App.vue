@@ -20,83 +20,64 @@
 	</footer>
 </template>
 
-<script>
+<script setup>
 import { ref, watch } from 'vue'
 import SearchForm from '@/components/SearchForm.vue'
 import WeatherDetails from '@/components/WeatherDetails.vue'
 
-export default {
-	name: 'App',
-	components: {
-		SearchForm,
-		WeatherDetails,
-	},
-	setup() {
-		const weatherData = ref( null )
-		const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
-		const isFetching = ref( false )
-		const appClasses = ref( 'clear-sky--day' )
-		const units = ref( 'metric' )
-		const timeOfDay = ref( null )
+const weatherData = ref( null )
+const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
+const isFetching = ref( false )
+const units = ref( 'metric' )
+const timeOfDay = ref( null )
 
-		// A second fetch is required to access additional data (e.g., sunrise, sunset, timezone).
-		const fetchWeatherData = async selectedLocation => {
-			try {
-				isFetching.value = true
-				const url = `https://api.openweathermap.org/data/2.5/weather?q=${ selectedLocation }&appid=${ apiKey }&units=${ units.value }`
-				const response = await fetch( url )
-				const data = await response.json()
-				weatherData.value = data
-				isFetching.value = false
-			} catch ( error ) {
-				console.error( error )
-			}
-		}
-
-		watch( weatherData, ( weatherData, prevWeatherData ) => {
-			if ( !prevWeatherData || weatherData.id !== prevWeatherData.id ) {
-				const wd = weatherData
-				if ( wd.dt > wd.sys.sunrise && wd.dt < wd.sys.sunset ) {
-					timeOfDay.value = 'day'
-				} else {
-					timeOfDay.value = 'night'
-				}
-
-				const app = document.getElementById( 'app' )
-				if ( wd.weather[ 0 ].description.includes( 'clear sky' ) ) {
-					app.className = `clear-sky--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'clouds' ) ) {
-					app.className = `clouds--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'rain' ) ) {
-					app.className = `rain--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'drizzle' ) ) {
-					app.className = `drizzle--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'thunderstorm' ) ) {
-					app.className = `thunderstorm--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'snow' ) ) {
-					app.className = `snow--${ timeOfDay.value }`
-				}
-				if ( wd.weather[ 0 ].description.includes( 'mist' ) ) {
-					app.className = `mist--${ timeOfDay.value }`
-				}
-			}
-		} )
-
-		return {
-			weatherData,
-			fetchWeatherData,
-			isFetching,
-			appClasses,
-			units,
-			timeOfDay,
-		}
-	},
+// A second fetch is required to access additional data (e.g., sunrise, sunset, timezone).
+const fetchWeatherData = async selectedLocation => {
+	try {
+		isFetching.value = true
+		const url = `https://api.openweathermap.org/data/2.5/weather?q=${ selectedLocation }&appid=${ apiKey }&units=${ units.value }`
+		const response = await fetch( url )
+		const data = await response.json()
+		weatherData.value = data
+		isFetching.value = false
+	} catch ( error ) {
+		console.error( error )
+	}
 }
+
+watch( weatherData, ( weatherData, prevWeatherData ) => {
+	if ( !prevWeatherData || weatherData.id !== prevWeatherData.id ) {
+		const wd = weatherData
+		if ( wd.dt > wd.sys.sunrise && wd.dt < wd.sys.sunset ) {
+			timeOfDay.value = 'day'
+		} else {
+			timeOfDay.value = 'night'
+		}
+
+		const app = document.getElementById( 'app' )
+		if ( wd.weather[ 0 ].description.includes( 'clear sky' ) ) {
+			app.className = `clear-sky--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'clouds' ) ) {
+			app.className = `clouds--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'rain' ) ) {
+			app.className = `rain--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'drizzle' ) ) {
+			app.className = `drizzle--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'thunderstorm' ) ) {
+			app.className = `thunderstorm--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'snow' ) ) {
+			app.className = `snow--${ timeOfDay.value }`
+		}
+		if ( wd.weather[ 0 ].description.includes( 'mist' ) ) {
+			app.className = `mist--${ timeOfDay.value }`
+		}
+	}
+} )
 </script>
 
 <style lang="scss">

@@ -29,67 +29,53 @@
 	</transition>
 </template>
 
-<script>
+<script setup>
 import { ref, watch, computed } from 'vue'
 import _debounce from 'lodash/debounce'
 
-export default {
-	emits: [ 'fetchWeatherData' ],
-	setup( _, context ) {
-		const query = ref( '' )
-		const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
-		const units = ref( 'metric' )
-		const suggestions = ref( null )
-		const selectedLocation = ref( null )
-		const isFetching = ref( false )
+const emit = defineEmits( [ 'fetchWeatherData' ] )
 
-		const formStyles = computed( () => {
-			if ( !selectedLocation.value ) {
-				return { 'margin-top': '32vh' }
-			}
-			return { 'margin-top': '20vh' }
-		} )
+const query = ref( '' )
+const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
+const units = ref( 'metric' )
+const suggestions = ref( null )
+const selectedLocation = ref( null )
+const isFetching = ref( false )
 
-		const fetchSearchData = _debounce( async () => {
-			if ( query.value ) {
-				try {
-					isFetching.value = true
-					const url = `https://api.openweathermap.org/data/2.5/find?q=${ query.value }&appid=${ apiKey }&units=${ units.value }`
-					const response = await fetch( url )
-					const data = await response.json()
-					suggestions.value = data.list
-					isFetching.value = false
-				} catch ( error ) {
-					console.error( error )
-				}
-			}
-		}, 400 )
+const formStyles = computed( () => {
+	if ( !selectedLocation.value ) {
+		return { 'margin-top': '32vh' }
+	}
+	return { 'margin-top': '20vh' }
+} )
 
-		const selectLocation = suggestionName => {
-			selectedLocation.value = suggestionName
-			clearSuggestions()
+const fetchSearchData = _debounce( async () => {
+	if ( query.value ) {
+		try {
+			isFetching.value = true
+			const url = `https://api.openweathermap.org/data/2.5/find?q=${ query.value }&appid=${ apiKey }&units=${ units.value }`
+			const response = await fetch( url )
+			const data = await response.json()
+			suggestions.value = data.list
+			isFetching.value = false
+		} catch ( error ) {
+			console.error( error )
 		}
+	}
+}, 400 )
 
-		watch( selectedLocation, async ( currSelectedLocation, prevSelectedLocation ) => {
-			if ( !prevSelectedLocation || currSelectedLocation !== prevSelectedLocation ) {
-				context.emit( 'fetchWeatherData', currSelectedLocation )
-			}
-		} )
-
-		const clearSuggestions = () => suggestions.value = null
-
-		return {
-			query,
-			suggestions,
-			units,
-			fetchSearchData,
-			selectLocation,
-			clearSuggestions,
-			isFetching,
-			formStyles,
-		}
-	},
+const selectLocation = suggestionName => {
+	selectedLocation.value = suggestionName
+	clearSuggestions()
 }
+
+watch( selectedLocation, async ( currSelectedLocation, prevSelectedLocation ) => {
+	if ( !prevSelectedLocation || currSelectedLocation !== prevSelectedLocation ) {
+		emit( 'fetchWeatherData', currSelectedLocation )
+	}
+} )
+
+const clearSuggestions = () => suggestions.value = null
 </script>
 
 <style lang="scss">

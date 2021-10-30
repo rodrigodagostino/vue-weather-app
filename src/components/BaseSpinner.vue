@@ -14,15 +14,13 @@
 	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		size: {
-			type: String,
-			required: false,
-		},
+<script setup>
+defineProps( {
+	size: {
+		type: String,
+		required: false,
 	},
-}
+} )
 </script>
 
 <style>
