@@ -1,5 +1,5 @@
 <template>
-	<transition name="fade-slide-up" leave-active-class="fade" appear>
+	<transition name="slide-fade-up" leave-active-class="fade" appear>
 		<BaseSpinner v-if="isFetching" size="large" />
 		<section v-else class="weather-data">
 			<h2 class="location">{{ location }}</h2>

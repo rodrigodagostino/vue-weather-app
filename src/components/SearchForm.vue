@@ -1,30 +1,32 @@
 <template>
-	<form @submit.prevent="fetchSearchData" class="search-form" :style="formStyles">
-		<input
-			type="text"
-			v-model.trim="query"
-			@input="fetchSearchData"
-			class="search-input"
-			:class="{ 'is-active': isFetching || suggestions }"
-			placeholder="Type in your desired location…"
-			autofocus
-		/>
-		<transition name="fade-slide-down" leave-active-class="fade-leave-active" appear mode="out-in">
-			<ul v-if="isFetching" class="search-suggestions">
-				<li class="search-suggestion">Searching…</li>
-			</ul>
-			<ul v-else-if="!isFetching && suggestions && suggestions.length > 0" class="search-suggestions">
-				<li v-for="suggestion in suggestions" :key="suggestion.id" class="search-suggestion">
-					<button type="button" @click="selectLocation(`${suggestion.name}, ${suggestion.sys.country}`)">
-						{{ `${suggestion.name}, ${suggestion.sys.country}` }}
-					</button>
-				</li>
-			</ul>
-			<ul v-else-if="!isFetching && suggestions && suggestions.length === 0" class="search-suggestions">
-				<li class="search-suggestion">There are no matching results.</li>
-			</ul>
-		</transition>
-	</form>
+	<transition name="slide-fade-up" appear>
+		<form @submit.prevent="fetchSearchData" class="search-form" :style="formStyles">
+			<input
+				type="text"
+				v-model.trim="query"
+				@input="fetchSearchData"
+				class="search-input"
+				:class="{ 'is-active': isFetching || suggestions }"
+				placeholder="Type in your desired location…"
+				autofocus
+			/>
+			<transition name="slide-fade-down" leave-active-class="fade-leave-active" appear mode="out-in">
+				<ul v-if="isFetching" class="search-suggestions">
+					<li class="search-suggestion">Searching…</li>
+				</ul>
+				<ul v-else-if="!isFetching && suggestions && suggestions.length > 0" class="search-suggestions">
+					<li v-for="suggestion in suggestions" :key="suggestion.id" class="search-suggestion">
+						<button type="button" @click="selectLocation(`${suggestion.name}, ${suggestion.sys.country}`)">
+							{{ `${suggestion.name}, ${suggestion.sys.country}` }}
+						</button>
+					</li>
+				</ul>
+				<ul v-else-if="!isFetching && suggestions && suggestions.length === 0" class="search-suggestions">
+					<li class="search-suggestion">There are no matching results.</li>
+				</ul>
+			</transition>
+		</form>
+	</transition>
 </template>
 
 <script>
