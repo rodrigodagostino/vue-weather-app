@@ -22,8 +22,8 @@
 
 <script>
 import { ref, watch } from 'vue'
-import SearchForm from './components/SearchForm.vue'
-import WeatherDetails from './components/WeatherDetails.vue'
+import SearchForm from '@/components/SearchForm.vue'
+import WeatherDetails from '@/components/WeatherDetails.vue'
 
 export default {
 	name: 'App',
@@ -33,7 +33,7 @@ export default {
 	},
 	setup() {
 		const weatherData = ref( null )
-		const apiKey = process.env.VUE_APP_OPENWEATHERMAP_API_KEY
+		const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
 		const isFetching = ref( false )
 		const appClasses = ref( 'clear-sky--day' )
 		const units = ref( 'metric' )

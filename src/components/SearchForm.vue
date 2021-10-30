@@ -35,7 +35,7 @@ export default {
 	emits: [ 'fetchWeatherData' ],
 	setup( _, context ) {
 		const query = ref( '' )
-		const apiKey = process.env.VUE_APP_OPENWEATHERMAP_API_KEY
+		const apiKey = import.meta.env.VITE_OPENWEATHERMAP_API_KEY
 		const units = ref( 'metric' )
 		const suggestions = ref( null )
 		const selectedLocation = ref( null )
