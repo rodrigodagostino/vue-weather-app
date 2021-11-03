@@ -15,12 +15,12 @@
 </template>
 
 <script setup>
-defineProps( {
+defineProps({
 	size: {
 		type: String,
 		required: false,
 	},
-} )
+})
 </script>
 
 <style>

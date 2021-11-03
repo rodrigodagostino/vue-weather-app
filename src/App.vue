@@ -77,7 +77,7 @@ watch( weatherData, ( weatherData, prevWeatherData ) => {
 			app.className = `mist--${ timeOfDay.value }`
 		}
 	}
-} )
+})
 </script>
 
 <style lang="scss">

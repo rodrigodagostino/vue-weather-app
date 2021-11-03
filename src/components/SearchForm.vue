@@ -47,7 +47,7 @@ const formStyles = computed( () => {
 		return { 'margin-top': '32vh' }
 	}
 	return { 'margin-top': '20vh' }
-} )
+})
 
 const fetchSearchData = _debounce( async () => {
 	if ( query.value ) {
@@ -73,7 +73,7 @@ watch( selectedLocation, async ( currSelectedLocation, prevSelectedLocation ) =>
 	if ( !prevSelectedLocation || currSelectedLocation !== prevSelectedLocation ) {
 		emit( 'fetchWeatherData', currSelectedLocation )
 	}
-} )
+})
 
 const clearSuggestions = () => suggestions.value = null
 </script>

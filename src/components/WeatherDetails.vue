@@ -35,12 +35,12 @@
 import { computed } from 'vue'
 import BaseSpinner from '@/components/BaseSpinner.vue'
 
-const props = defineProps( {
+const props = defineProps({
 	weatherData: Object,
 	units: String,
 	timeOfDay: String,
 	isFetching: Boolean,
-} )
+})
 
 const location = computed( () => `${ props.weatherData.name }, ${ props.weatherData.sys.country }` )
 const iconClasses = computed( () => `icon wi wi-owm-${ props.timeOfDay }-${ props.weatherData.weather[ 0 ].id }` )
@@ -54,7 +54,7 @@ const description = computed( () => {
 		props.weatherData.weather[ 0 ].description.charAt( 0 ).toUpperCase() +
 				props.weatherData.weather[ 0 ].description.slice( 1 )
 	)
-} )
+})
 const wind = computed( () => `${ Math.round( props.weatherData.wind.speed ) } km/h` )
 </script>
 
